@@ -1,4 +1,4 @@
-Consulta 1 — Resumen ejecutivo mensual 
+-- Consulta 1 — Resumen ejecutivo mensual 
 
 SELECT YEAR(fecha_venta) AS anio,
 MONTH(fecha_venta) AS mes,
@@ -10,7 +10,7 @@ FROM ventas
 GROUP BY YEAR(fecha_venta), MONTH(fecha_venta)
 ORDER BY anio, mes;
 
-Consulta 2 — Ranking de productos 
+-- Consulta 2 — Ranking de productos 
 
 SELECT TOP 5
     id_producto,
@@ -18,10 +18,10 @@ SELECT TOP 5
     SUM(cantidad * precio_unitario) AS total_facturado
 FROM ventas
 GROUP BY id_producto
-ORDER BY total_facturado
+ORDER BY total_facturado DESC
 ;
 
-Consulta 3 — Clientes recurrentes 
+-- Consulta 3 — Clientes recurrentes 
 
 SELECT id_cliente,
 COUNT(*) AS pedidos,
@@ -32,7 +32,7 @@ GROUP BY id_cliente
 HAVING COUNT(*) > 1
 ORDER BY pedidos DESC;
 
-Consulta 4 — Meses por encima/por debajo del promedio 
+-- Consulta 4 — Meses por encima/por debajo del promedio 
 
 SELECT YEAR(fecha_venta)   AS anio,
        MONTH(fecha_venta)  AS mes,
@@ -49,7 +49,7 @@ FROM   ventas
 GROUP BY YEAR(fecha_venta), MONTH(fecha_venta)
 ORDER BY anio, mes;
 
-COMENTARIOS:
+-- COMENTARIOS:
 1- El producto con ID 2 fue el que registró la mayor cantidad de unidades vendidas.
 2- El producto con ID 3, aunque no fue el más vendido en cantidad de unidades, fue el que alcanzó el mayor total facturado.
 3- El cliente con ID 1 fue uno de los clientes más recurrentes y registró el mayor monto total gastado.

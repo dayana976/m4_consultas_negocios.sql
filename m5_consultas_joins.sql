@@ -46,25 +46,29 @@ WHERE v.id_producto IS NULL;
 -- Consulta 4 — Consolidado por canal (UNION ALL)
 ===========================================================*/
 SELECT
-    origen,
-    SUM(total_venta) AS total_facturado
-FROM (
-    SELECT
-        'Rosario' AS origen,
-        v.Cantidad * v.precio_unitario AS total_venta
-    FROM dbo.Ventas AS v
-    INNER JOIN dbo.Clientes AS c
-        ON v.id_cliente = c.id_cliente
-    WHERE c.ciudad = 'Rosario'
+    p.nombre_producto AS Producto,
+    c.ciudad AS Ciudad,
+    SUM(v.Cantidad) AS UnidadesVendidas,
+    SUM(v.Cantidad * p.precio) AS Total_facturado
+FROM dbo.Ventas AS v
+INNER JOIN dbo.Clientes AS c
+    ON v.id_cliente = c.id_cliente
+INNER JOIN dbo.Productos AS p
+    ON v.id_producto = p.id_producto
+WHERE c.ciudad = 'Rosario'
+GROUP BY p.nombre_producto, c.ciudad
 
-    UNION ALL
+UNION ALL
 
-    SELECT
-        'Buenos Aires' AS origen,
-        v.Cantidad * v.precio_unitario AS total_venta
-    FROM dbo.Ventas AS v
-    INNER JOIN dbo.Clientes AS c
-        ON v.id_cliente = c.id_cliente
-    WHERE c.ciudad = 'Buenos Aires'
-) AS ventas_por_origen
-GROUP BY origen;
+SELECT
+    p.nombre_producto AS Producto,
+    c.ciudad AS Ciudad,
+    SUM(v.Cantidad) AS UnidadesVendidas,
+    SUM(v.Cantidad * p.precio) AS Total_facturado
+FROM dbo.Ventas AS v
+INNER JOIN dbo.Clientes AS c
+    ON v.id_cliente = c.id_cliente
+INNER JOIN dbo.Productos AS p
+    ON v.id_producto = p.id_producto
+WHERE c.ciudad = 'Buenos Aires'
+GROUP BY p.nombre_producto, c.ciudad
